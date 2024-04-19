@@ -1,13 +1,7 @@
-from nltk.tokenize import word_tokenize
-
-# Custom tokenizer function using NLTK's word_tokenize
-def custom_tokenizer(sentence):
-    return set(word_tokenize(sentence.lower()))
-
-def jaccard_similarity(reference_sentence, sentence):
+def jaccard_similarity(reference_sentence, sentence, tokenizer):
     # Tokenize the sentences
-    reference_tokens = custom_tokenizer(reference_sentence)
-    sentence_tokens = custom_tokenizer(sentence)
+    reference_tokens = tokenizer(reference_sentence)
+    sentence_tokens = tokenizer(sentence)
     
     # Calculate the Jaccard similarity
     intersection = len(reference_tokens.intersection(sentence_tokens))
@@ -16,20 +10,22 @@ def jaccard_similarity(reference_sentence, sentence):
     
     return jaccard_sim
 
-def calculate_jaccard_similarity(reference_sentence, sentence_list):
+def calculate_jaccard_similarity(reference_sentence, sentence_list, tokenizer):
     jaccard_similarities = []
+
     for sentence in sentence_list:
-        jaccard_sim = jaccard_similarity(reference_sentence, sentence)
+        jaccard_sim = jaccard_similarity(reference_sentence, sentence, tokenizer)
         jaccard_similarities.append(jaccard_sim)
+
     return jaccard_similarities
 
 # Example usage
-reference_sentence = "This is a reference sentence."
-sentence_list = [
-    "This is the first sentence.",
-    "This is the second sentence.",
-    "This is the third sentence."
-]
+# reference_sentence = "This is a reference sentence."
+# sentence_list = [
+#     "This is the first sentence.",
+#     "This is the second sentence.",
+#     "This is the third sentence."
+# ]
 
-jaccard_similarities = calculate_jaccard_similarity(reference_sentence, sentence_list)
-print("Jaccard similarities:", jaccard_similarities)
+# jaccard_similarities = calculate_jaccard_similarity(reference_sentence, sentence_list)
+# print("Jaccard similarities:", jaccard_similarities)
