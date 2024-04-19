@@ -1,5 +1,5 @@
 import sys
-from tik_token import get_tokens_tik_token
+from tokenizers.tik_token import get_tokens_tik_token
 import pandas as pd
 
 def read_headlines_from_csv(file_path):
@@ -15,7 +15,7 @@ def read_headlines_from_csv(file_path):
 def main():
     # Check if the correct number of arguments is provided
     if len(sys.argv) != 4:
-        print("Usage: python main.py <csv file> <target headline> <SLO>")
+        print("Usage: python main.py <csv file> <target headline csv file> <SLO>")
         return
     
     # Extract command-line arguments
