@@ -1,5 +1,6 @@
 import sys
 from tokenizers.tik_token import get_tokens_tik_token
+from tokenizers.n_gram import get_tokens_n_gram
 import pandas as pd
 
 def read_headlines_from_csv(file_path):
@@ -59,6 +60,10 @@ def main():
     # calling tik token tokenizer.
     print("Calling tik token tokenizer")
     result_tik_token = get_tokens_tik_token(list_sentences, target_headline)
+
+    result_n_gram = []
+    # calling n_gram
+    result_n_gram = get_tokens_n_gram(list_sentences, target_headline)
     
     # now once we have the models, we need to iterate through those and match with slo requirements and trigger accordingly.
 
