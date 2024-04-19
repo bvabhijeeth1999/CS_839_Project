@@ -1,7 +1,6 @@
 import tiktoken
 
 def get_tokens_tik_token(list_sentences, target_sentence):
-
     # load an encoding by name
     encoding = tiktoken.get_encoding("cl100k_base")
 

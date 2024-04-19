@@ -1,5 +1,4 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-import nltk
 from nltk.tokenize import word_tokenize
 
 # Custom tokenizer function using NLTK's word_tokenize
