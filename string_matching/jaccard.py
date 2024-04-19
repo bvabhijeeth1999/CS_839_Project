@@ -1,7 +1,7 @@
 def jaccard_similarity(reference_sentence, sentence, tokenizer):
     # Tokenize the sentences
-    reference_tokens = tokenizer(reference_sentence)
-    sentence_tokens = tokenizer(sentence)
+    reference_tokens = set(tokenizer(reference_sentence))
+    sentence_tokens = set(tokenizer(sentence))
     
     # Calculate the Jaccard similarity
     intersection = len(reference_tokens.intersection(sentence_tokens))
@@ -16,16 +16,11 @@ def calculate_jaccard_similarity(reference_sentence, sentence_list, tokenizer):
     for sentence in sentence_list:
         jaccard_sim = jaccard_similarity(reference_sentence, sentence, tokenizer)
         jaccard_similarities.append(jaccard_sim)
+    
+    sentences_result = []
+    count  = 0
+    for sentence in sentence_list:
+        sentences_result.append((sentence, jaccard_similarities[count]))
+        count += 1
 
-    return jaccard_similarities
-
-# Example usage
-# reference_sentence = "This is a reference sentence."
-# sentence_list = [
-#     "This is the first sentence.",
-#     "This is the second sentence.",
-#     "This is the third sentence."
-# ]
-
-# jaccard_similarities = calculate_jaccard_similarity(reference_sentence, sentence_list)
-# print("Jaccard similarities:", jaccard_similarities)
+    return sentences_result

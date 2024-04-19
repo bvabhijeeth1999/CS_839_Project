@@ -1,7 +1,10 @@
 import sys
 from tokenizers.tik_token import get_tokens_tik_token
 from tokenizers.n_gram import get_tokens_n_gram
+from string_matching.tfidf import calculate_tfidf
+from string_matching.jaccard import calculate_jaccard_similarity
 import pandas as pd
+from pprint import pprint
 
 def read_headlines_from_csv(file_path):
     # Read the CSV file into a DataFrame
@@ -12,6 +15,8 @@ def read_headlines_from_csv(file_path):
     
     return headlines
 
+def decreasing_order(a):
+    return -a[1]
 
 def main():
     # Check if the correct number of arguments is provided
@@ -27,43 +32,19 @@ def main():
     list_sentences = read_headlines_from_csv(csv_file)
     target_headlines = read_headlines_from_csv(target_file)
     target_headline = target_headlines[0]
-
-    for sentence in list_sentences:
-        print(sentence)
-
-    print("Printing target headline")
-    print(target_headline)
     
     # Sample run command : 
     # python3 main.py input_list_sentences.csv target_sentence.csv 3
+    
+    print("-----------------------TFIDF--------------------------------")
+    result1 = calculate_tfidf(target_headline, list_sentences, get_tokens_tik_token)
+    result1.sort(key = decreasing_order)
+    pprint(result1)
 
-    # sample list_sentences = [
-    #     "Fed official says weak data caused by weather, should not slow taper",
-    #     "Fed's Charles Plosser sees high bar for change in pace of tapering",
-    #     "US open: Stocks fall after Fed official hints at accelerated tapering",
-    #     "Fed risks falling 'behind the curve', Charles Plosser says",
-    #     "Fed's Plosser: Nasty Weather Has Curbed Job Growth",
-    #     "Plosser: Fed May Have to Accelerate Tapering Pace",
-    #     "Fed's Plosser: Taper pace may be too slow",
-    #     "Fed's Plosser expects US unemployment to fall to 6.2% by the end of 2014",
-    #     "US jobs growth last month hit by weather:Fed President Charles Plosser",
-    #     "ECB unlikely to end sterilisation of SMP purchases - traders" ,
-    #     "ECB unlikely to end sterilization of SMP purchases: traders",
-    #     "EU's half-baked bank union could work",
-    #     "Europe reaches crunch point on banking union",
-    #     "ECB FOCUS-Stronger euro drowns out ECB's message to keep rates low for  ...",
-    #     "EU aims for deal on tackling failing banks"
-    # ]
-
-
-    result_tik_token = []
-    # calling tik token tokenizer.
-    print("Calling tik token tokenizer")
-    result_tik_token = get_tokens_tik_token(list_sentences, target_headline)
-
-    result_n_gram = []
-    # calling n_gram
-    result_n_gram = get_tokens_n_gram(list_sentences, target_headline)
+    print("-----------------------Jaccard--------------------------------")
+    result2 = calculate_jaccard_similarity(target_headline, list_sentences, get_tokens_n_gram(1))
+    result2.sort(key = decreasing_order)
+    pprint(result2)
     
     # now once we have the models, we need to iterate through those and match with slo requirements and trigger accordingly.
 
@@ -83,8 +64,6 @@ def main():
     # all other scores and return top k.
 
     # After that, profile all combinations (time per sentence is considered) and trigger according to user requirement from main.
-
-
 
 
 if __name__ == "__main__":
