@@ -16,7 +16,7 @@ def get_tokens_tik_token(list_sentences, target_sentence):
     
     token_list = encoding.encode(target_sentence)
     tokens = [encoding.decode_single_token_bytes(token).decode('utf-8') for token in token_list]
-    output_target_sentence.append((sentence,tokens))
+    output_target_sentence.append((target_sentence,tokens))
     
     print("\nprinting list of sentences with tokens from tiktoken\n")
     for tup in output_list_sentences:
