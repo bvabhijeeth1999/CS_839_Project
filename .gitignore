@@ -3,3 +3,8 @@ __pycache__/
 
 # Ignore macOS .DS_Store files
 .DS_Store
+
+# Ignore virtual env stuff
+bin/
+lib/
+pyvenv.cfg

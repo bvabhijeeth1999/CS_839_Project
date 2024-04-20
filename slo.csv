@@ -1,0 +1,10 @@
+Tokenizer,String Matching Algorithm,Time
+tik_token,jaccard,320
+tik_token,lstm,
+tik_token,tfidf,275
+n_gram,jaccard,6
+n_gram,lstm,
+n_gram,tfidf,10
+whitespace,jaccard,3
+whitespace,lstm,
+whitespace,tfidf,9
