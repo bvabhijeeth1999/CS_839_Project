@@ -2,9 +2,9 @@ Tokenizer,String Matching Algorithm,Time,Threshold,Precision,Recall,F1
 tik_token,jaccard,320,0.15,,,
 tik_token,lstm,,,,,
 tik_token,tfidf,275,0.15,,,
-n_gram,jaccard,6,0.075,0.42510397857706606,0.211639686142044,0.2518542843352042
+n_gram,jaccard,6,0.075,0.425103979,0.211639686,0.251854284
 n_gram,lstm,,,,,
-n_gram,tfidf,10,0.075,0.47093539109858756,0.2794705413959715,0.3147152469603252
+n_gram,tfidf,10,0.075,0.470935391,0.279470541,0.314715247
 whitespace,jaccard,3,0.2,0.547091154,0.269535364,0.32603229
 whitespace,lstm,,,,,
 whitespace,tfidf,9,0.2,0.612821409,0.415876008,0.452950883
