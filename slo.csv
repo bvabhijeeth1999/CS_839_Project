@@ -1,7 +1,7 @@
 Tokenizer,String Matching Algorithm,Time,Threshold,Precision,Recall,F1
-tik_token,jaccard,320,0.15,,,
+tik_token,jaccard,320,0.15,0.511434007,0.362342188,0.391147729
 tik_token,lstm,,,,,
-tik_token,tfidf,275,0.15,,,
+tik_token,tfidf,275,0.15,0.540312426,0.576205804,0.521191279
 n_gram,jaccard,6,0.075,0.425103979,0.211639686,0.251854284
 n_gram,lstm,,,,,
 n_gram,tfidf,10,0.075,0.470935391,0.279470541,0.314715247
