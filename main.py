@@ -9,7 +9,7 @@ import pandas as pd
 from pprint import pprint
 import time
 
-def print_relevant_headlines(results, threshold):
+def get_relevant_headlines(results, threshold):
         k = 20 # top 10 headlines
         t = 0
         for result in results:
@@ -18,12 +18,23 @@ def print_relevant_headlines(results, threshold):
         
         if(t > k):
             print("printing t records")
-            #pprint(results[0:t])
-            print(t)
+            return results[0:t]
+            #print(t)
         else:
             print("printing k records")
-            #pprint(results[0:k])
-            print(k)
+            return results[0:k]
+            #print(k)
+
+def calculate_precision(tp, fp):
+    return tp / (tp + fp)
+
+def calculate_recall(tp, fn):
+    return tp / (tp + fn)
+
+def calculate_f1_score(tp, fp, fn):
+    precision = calculate_precision(tp, fp)
+    recall = calculate_recall(tp, fn)
+    return 2 * (precision * recall) / (precision + recall)
 
 
 def read_headlines_from_csv(file_path):
@@ -58,6 +69,7 @@ def main():
 
     # clean_strings(raw_file, csv_file)
 
+    cleaned_data_df = pd.read_csv(csv_file)
     list_sentences = read_headlines_from_csv(csv_file)
     target_headlines = read_headlines_from_csv(target_file)
     # target_headline = target_headlines[0]
@@ -161,13 +173,73 @@ def main():
     print(random_target_headlines.head(138))
     # 138 unique stories in first 10k headings.
 
+    #code to get f1,p,r metrics for 10k headlines
+    f1 = 0
+    p = 0
+    r = 0
+    cnt = 0
     for index, row in random_target_headlines.iterrows():
+        fn = 0
+        fp = 0
+        tp = 0
+        tn = 0
         random_target_headline = row[0]
-        #print(random_target_headline)
+        random_target_story = row[1]
+        print("Printing random target headline")
+        print(random_target_headline)
         result2 = calculate_tfidf(random_target_headline, list_sentences[0:10000], get_tokens_n_gram(1))
         result2.sort(key = decreasing_order)
         #print_relevant_headlines(result2,0.15)
+        relevant_headlines = get_relevant_headlines(result2,0.2)
+        print("Printing relevant headlines length")
+        print(len(relevant_headlines))
+
+        # search in cleaned_data_df for value result2[i]
+        for relevant_headline in relevant_headlines:
+            # print("printing relevant healine")
+            # print(relevant_headline[0])
+            relevant_headline_row = cleaned_data_df[cleaned_data_df['TITLE'] == relevant_headline[0]]
+            # print("Printing relevant headline rows")
+            # print(relevant_headline_row['STORY'].values[0])
+            if(relevant_headline_row['STORY'].values[0] == random_target_story):
+                tp += 1
+            else:
+                fp += 1
+            
+        relevant_stories = cleaned_data_df[cleaned_data_df['STORY'] == random_target_story]
+        print(len(relevant_stories))
+
+        fn = len(relevant_stories) - tp
+
+        print(tp, tn, fp, fn)
+
+        print("precision : ")
+        p += calculate_precision(tp,fp)
+        print(calculate_precision(tp,fp))
+        print("recall : ")
+        r += calculate_recall(tp,fn)
+        print(calculate_recall(tp,fn))
+        print("F1 : ")
+        f1 += calculate_f1_score(tp,fp,fn)
+        print(calculate_f1_score(tp,fp,fn))
+        print("\n")
     
+        cnt += 1
+
+        if(cnt == 138):
+            break
+        
+    avg_precision = p/138
+    avg_recall = r/138
+    avg_f1 = f1/138
+
+    print("avg_precision")
+    print(avg_precision)
+    print("avg_recall")
+    print(avg_recall)
+    print("avg_f1")
+    print(avg_f1)
+
     
 
 if __name__ == "__main__":
