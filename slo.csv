@@ -5,6 +5,6 @@ tik_token,tfidf,275,0.15,,,
 n_gram,jaccard,6,0.075,,,
 n_gram,lstm,,,,,
 n_gram,tfidf,10,0.075,,,
-whitespace,jaccard,3,0.2,,,
+whitespace,jaccard,3,0.2,0.547091154,0.269535364,0.32603229
 whitespace,lstm,,,,,
 whitespace,tfidf,9,0.2,0.612821409,0.415876008,0.452950883
