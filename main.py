@@ -9,13 +9,33 @@ import pandas as pd
 from pprint import pprint
 import time
 
+def print_relevant_headlines(results, threshold):
+        k = 20 # top 10 headlines
+        t = 0
+        for result in results:
+            if result[1] >= threshold:
+                t += 1 
+        
+        if(t > k):
+            print("printing t records")
+            #pprint(results[0:t])
+            print(t)
+        else:
+            print("printing k records")
+            #pprint(results[0:k])
+            print(k)
+
+
 def read_headlines_from_csv(file_path):
     # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, header=None)
-    
+    df = pd.read_csv(file_path)
+    # print(df.shape)
+    # pprint(df.iloc[:,1:2])
     # Extract headlines from the first column
-    headlines = df.iloc[:, 0].tolist()
+    headlines = df['TITLE'].to_list()
     
+    #pprint(headlines)
+
     return headlines
 
 def decreasing_order(a):
@@ -26,10 +46,6 @@ def main():
     if len(sys.argv) != 4:
         print("Usage: python main.py <csv file> <target headline csv file> <SLO>")
         return
-
-
-
-    threshold = 0.7
 
     # Extract command-line arguments
     csv_file = sys.argv[1]
@@ -44,9 +60,11 @@ def main():
 
     list_sentences = read_headlines_from_csv(csv_file)
     target_headlines = read_headlines_from_csv(target_file)
-    target_headline = target_headlines[0]
+    # target_headline = target_headlines[0]
     
     # Sample run command : 
+    # python3 main.py cleaned_data.csv target_sentence.csv 3
+    # python3 main.py uci-news-aggregator.csv target_sentence.csv 3
     # python3 main.py cleaned_data.csv target_sentence.csv 3
     
     # print("-----------------------TFIDF--------------------------------")
@@ -54,25 +72,8 @@ def main():
     # result1.sort(key = decreasing_order)
     # pprint(result1)
 
-    k = 20 # top 10 results
 
 
-
-    # code to calculate accuracy
-    for target_headline in target_headlines:
-        result1 = calculate_tfidf(target_headline, list_sentences[0:20000], get_tokens_tik_token)
-        result1.sort(key = decreasing_order)
-        t = 0
-        for result in result1:
-            if result[1] >= 0.7:
-                t += 1 
-        
-        if(t > k):
-            print("printing t records")
-            pprint(result1[0:t])
-        else:
-            print("printing k records")
-            pprint(result1[0:k])
 
     
 
@@ -113,10 +114,12 @@ def main():
     # found the problem (sujay thinks there are multiple, sujay is right): Paris car ban set to start after pollution hits highŸæ€åÿ±ÿ≥ ŸÖ€å⁄∫ ⁄Øÿß⁄ë€åŸà⁄∫ ⁄©€í ÿ±Ÿàÿ≤ÿßŸÜ€Å  ...
     # another one : I–≤–Ç‚Ñ¢m Not Dead –≤–Ç‚Äú Wayne "Newman" Knight
     # wrote a script to remove all this stuff.
+
+    # n - gram n is 2.
             
     # TO DO : 
-    # 0. Write a script to select random sentence for target sentence from each story.
-    # 1. identify what the threshold should be, by running the program with random target sentences.
+    # 0. Write a script to select random sentence for target sentence from each story. (done)
+    # 1. identify what the threshold should be, by running the program with random target sentences. (done)
     # 2. Write code to get precision, recall, F1 and then calculate average and pipeline ready
     # 3. see if you need to extend slo params (anything in addition to time.)
     # 4. write code to take user slo requirements and select best pipeline.
@@ -141,6 +144,31 @@ def main():
 
     # avg_time = cumm_time/(100*len(list_sentences))
     # print(avg_time)
+            
+    # code to get random target sentence from cleaned df
+    target_sentences_random = []
+    main_data_path = 'cleaned_data.csv'
+    df = pd.read_csv(main_data_path)
+    df = df.iloc[:, [1, 5]]
+
+    def select_random_row(group):
+        return group.sample(1, random_state=42)  # Set random_state for reproducibility
+
+    # Apply the function to each group of story_id
+    random_target_headlines = df.groupby('STORY', group_keys=False, sort=False).apply(select_random_row)
+
+    # Display the result
+    print(random_target_headlines.head(138))
+    # 138 unique stories in first 10k headings.
+
+    for index, row in random_target_headlines.iterrows():
+        random_target_headline = row[0]
+        #print(random_target_headline)
+        result2 = calculate_tfidf(random_target_headline, list_sentences[0:10000], get_tokens_n_gram(1))
+        result2.sort(key = decreasing_order)
+        #print_relevant_headlines(result2,0.15)
+    
+    
 
 if __name__ == "__main__":
     main()
