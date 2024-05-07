@@ -4,6 +4,7 @@ from tokenizers.n_gram import get_tokens_n_gram
 from tokenizers.whitespace import get_tokens_whitespace
 from string_matching.tfidf import calculate_tfidf
 from string_matching.jaccard import calculate_jaccard_similarity
+from string_matching.llm import calculate_llm
 from clean_data import clean_strings
 import pandas as pd
 from pprint import pprint
@@ -110,7 +111,7 @@ def main():
     print(final_tokenizer)
     print(final_sm_algo) 
 
-    sm_dict = {"tfidf": calculate_tfidf,"jaccard": calculate_jaccard_similarity}
+    sm_dict = {"tfidf": calculate_tfidf,"jaccard": calculate_jaccard_similarity,"llm": calculate_llm}
     tokenizer_dict = {"tik_token": get_tokens_tik_token, "n_gram": get_tokens_n_gram, "whitespace": get_tokens_whitespace}
 
     result = sm_dict[final_sm_algo](target_headline, list_sentences, tokenizer_dict[final_tokenizer])
@@ -123,6 +124,7 @@ def main():
     # python3 main.py cleaned_data.csv target_sentence.csv 3
     # python3 main.py uci-news-aggregator.csv target_sentence.csv 3
     # python3 main.py cleaned_data.csv target_sentence.csv 3
+    #  python3 main.py cleaned_data.csv target_sentence.csv 20 1 1
     
     # now once we have the models, we need to iterate through those and match with slo requirements and trigger accordingly.
 
